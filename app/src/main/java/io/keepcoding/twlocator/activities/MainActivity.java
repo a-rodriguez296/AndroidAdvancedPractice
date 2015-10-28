@@ -15,6 +15,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.keepcoding.twlocator.R;
+import io.keepcoding.twlocator.model.Tweet;
 import io.keepcoding.twlocator.util.NetworkHelper;
 import io.keepcoding.twlocator.util.twitter.ConnectTwitterTask;
 import io.keepcoding.twlocator.util.twitter.TwitterHelper;
@@ -92,7 +93,13 @@ public class MainActivity extends ActionBarActivity implements ConnectTwitterTas
 
             @Override
             public void gotHomeTimeline(ResponseList<Status> statuses) {
+                for (Status s: statuses) {
+                    Log.d("Twitter", "tweet: " + s.getText());
+                    Tweet tweet = new Tweet(s.getId(), s.getText(), s.getGeoLocation());
+                    Log.d("Twitter",tweet.toString());
 
+
+                }
             }
 
             @Override
@@ -557,7 +564,7 @@ public class MainActivity extends ActionBarActivity implements ConnectTwitterTas
 
             }
         });
-        twitter.getUserTimeline();
+        twitter.getHomeTimeline();
     }
 
     @Override
