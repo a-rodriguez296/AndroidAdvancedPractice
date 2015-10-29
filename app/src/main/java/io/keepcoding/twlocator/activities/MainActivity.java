@@ -1,5 +1,9 @@
 package io.keepcoding.twlocator.activities;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -16,6 +20,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.keepcoding.twlocator.R;
 import io.keepcoding.twlocator.model.Tweet;
+import io.keepcoding.twlocator.model.dao.TweetDao;
+import io.keepcoding.twlocator.provider.TwLocatorProvider;
 import io.keepcoding.twlocator.util.NetworkHelper;
 import io.keepcoding.twlocator.util.twitter.ConnectTwitterTask;
 import io.keepcoding.twlocator.util.twitter.TwitterHelper;
@@ -24,6 +30,7 @@ import twitter4j.AsyncTwitter;
 import twitter4j.Category;
 import twitter4j.DirectMessage;
 import twitter4j.Friendship;
+import twitter4j.GeoLocation;
 import twitter4j.IDs;
 import twitter4j.Location;
 import twitter4j.OEmbed;
@@ -47,8 +54,15 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.OAuth2Token;
 import twitter4j.auth.RequestToken;
 
+import static io.keepcoding.twlocator.model.db.DBConstants.KEY_TWEET_CREATION_DATE;
+import static io.keepcoding.twlocator.model.db.DBConstants.KEY_TWEET_ID;
+import static io.keepcoding.twlocator.model.db.DBConstants.KEY_TWEET_LATITUDE;
+import static io.keepcoding.twlocator.model.db.DBConstants.KEY_TWEET_LONGITUDE;
+import static io.keepcoding.twlocator.model.db.DBConstants.KEY_TWEET_MODIFICATION_DATE;
+import static io.keepcoding.twlocator.model.db.DBConstants.KEY_TWEET_TEXT;
 
-public class MainActivity extends ActionBarActivity implements ConnectTwitterTask.OnConnectTwitterListener {
+
+public class MainActivity extends ActionBarActivity implements ConnectTwitterTask.OnConnectTwitterListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     ConnectTwitterTask twitterTask;
     private static final int URL_LOADER = 0;
@@ -81,6 +95,14 @@ public class MainActivity extends ActionBarActivity implements ConnectTwitterTas
                 launchTwitter();
             }
         });
+
+
+
+        LoaderManager loaderManager = getLoaderManager();
+
+        loaderManager.initLoader(0,
+                null,//Bundle parámetro
+                this); //Delegado
     }
 
     private void launchTwitter() {
@@ -94,8 +116,7 @@ public class MainActivity extends ActionBarActivity implements ConnectTwitterTas
             @Override
             public void gotHomeTimeline(ResponseList<Status> statuses) {
                 for (Status s: statuses) {
-                    Log.d("Twitter", "tweet: " + s.getText());
-                    Tweet tweet = new Tweet(s.getId(), s.getText(), s.getGeoLocation());
+                    Tweet tweet = new Tweet(s.getId(), s.getText(), new GeoLocation(3.45, 3.45));
                     Log.d("Twitter",tweet.toString());
 
 
@@ -595,5 +616,26 @@ public class MainActivity extends ActionBarActivity implements ConnectTwitterTas
 
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        //Esto lo que hace es crear un hilo en 2do plano y pedirle al contentResolver q haga la consulta que le estoy pasando
+        String[] allColumns = {
+                "*"
+
+
+        };
+        CursorLoader loader = new CursorLoader(this, TwLocatorProvider.TWEETS_URI, TweetDao.allColumns,null,null,null);
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d("Twitter","Entro al loadFinish");
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }
 

@@ -86,6 +86,7 @@ public class TwLocatorProvider extends ContentProvider {
 
         // Specify the table on which to perform the query. This can // be a specific table or a join as required. queryBuilder.setTables(MySQLiteOpenHelper.DATABASE_TABLE);
         // Execute the query.
+
         Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, groupBy, having, sortOrder);
         // Return the result Cursor.
         cursor.setNotificationUri(getContext().getContentResolver(), uri);

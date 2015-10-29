@@ -17,13 +17,13 @@ public class DBConstants {
 
     public static final String SQL_CREATE_TWEET_TABLE =
             "create table "
-                    + TABLE_TWEET + "( " + KEY_TWEET_ID
+                    + TABLE_TWEET + " ( " + KEY_TWEET_ID
                     + " integer primary key autoincrement, "
-                    + KEY_TWEET_TEXT + " text not null,"
+                    + KEY_TWEET_TEXT + " text not null, "
                     + KEY_TWEET_CREATION_DATE + " INTEGER, "
-                    + KEY_TWEET_MODIFICATION_DATE + " INTEGER "
-                    + KEY_TWEET_LATITUDE + " real,"
+                    + KEY_TWEET_MODIFICATION_DATE + " INTEGER, "
                     + KEY_TWEET_LONGITUDE + " real, "
+                    + KEY_TWEET_LATITUDE + " real "
                     + ");";
 
 

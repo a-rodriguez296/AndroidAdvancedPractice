@@ -16,9 +16,15 @@ public class TwLocatorProviderHelper {
         return rowID;
     }
 
-    public static Cursor getAllNotebooks() {
+    public static void deleteAllTweets(){
         ContentResolver cr = TwLocatorApp.getAppContext().getContentResolver();
+        cr.delete(TwLocatorProvider.TWEETS_URI,null, null);
 
+    }
+
+
+    public static Cursor getAllTweets() {
+        ContentResolver cr = TwLocatorApp.getAppContext().getContentResolver();
         Cursor cursor = cr.query(TwLocatorProvider.TWEETS_URI, TweetDao.allColumns, null, null, null);
 
         return cursor;
@@ -37,14 +43,14 @@ public class TwLocatorProviderHelper {
         return uri;
     }
 
-    public static void deleteNotebook(Tweet tweet) {
+    public static void deleteTweet(Tweet tweet) {
         ContentResolver cr = TwLocatorApp.getAppContext().getContentResolver();
         String sUri = TwLocatorProvider.TWEETS_URI.toString() + "/" + tweet.getId();
         Uri uri = Uri.parse(sUri);
         cr.delete(uri, null, null);
     }
 
-    public static int updateNotebook(Tweet tweet) {
+    public static int updateTweet(Tweet tweet) {
         if (tweet == null) {
             return (int) DBHelper.INVALID_ID;
         }

@@ -16,8 +16,9 @@ public class TweetDao {
             KEY_TWEET_TEXT,
             KEY_TWEET_CREATION_DATE,
             KEY_TWEET_MODIFICATION_DATE,
-            KEY_TWEET_LATITUDE,
+
             KEY_TWEET_LONGITUDE,
+            KEY_TWEET_LATITUDE,
 
 
     };
