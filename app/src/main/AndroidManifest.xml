@@ -24,6 +24,7 @@
         android:required="true" />
 
     <application
+        android:name=".TwLocatorApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -73,6 +74,9 @@
         </activity>
 
         <!-- Content providers -->
+        <provider
+            android:authorities="io.keepcoding.twlocator.provider"
+            android:name=".provider.TwLocatorProvider"/>
 
     </application>
 
